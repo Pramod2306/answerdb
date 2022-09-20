@@ -6,15 +6,16 @@ const Answer= require("../model/answermodel");
 
 exports.CreateQuestion=async(req,res)=>{
 
-    const {question,answer,code}=req.body;
+    const {question}=req.body;
+    console.log(req.body)
     
 
 
     try{
-        if(code===process.env.CODE){
+       
             const user=await Answer.create({
-                question,
-                answer
+                question:question,
+                answer:""
             })
             if(user){
                 res.status(201).json(
@@ -23,21 +24,40 @@ exports.CreateQuestion=async(req,res)=>{
                     message:"QA added",
                     response:"done"}
                 );
-            }
-        }else{
-            res.status(200).json(
-                {
-                success:true,
-                message:"added",
-                response:"done"}
-            );
-        }
+            }   
         
     }catch(err){
         res.status(400).json(
             {
             success:false,
-            message:"QA not added",
+            message:"Question not added",
+            response:"not done"}
+        );
+    }
+
+}
+
+exports.addAnswer=async(req,res)=>{
+
+    const {_id,answer}=req.body;
+    
+    try{
+       
+            const user=await Answer.findByIdAndUpdate({_id},{answer})
+            if(user){
+                res.status(201).json(
+                    {
+                    success:true,
+                    message:"answer added",
+                    response:"done"}
+                );
+            }   
+        
+    }catch(err){
+        res.status(400).json(
+            {
+            success:false,
+            message:"Answer added",
             response:"not done"}
         );
     }
@@ -52,7 +72,7 @@ exports.GetQuestion=async(req,res)=>{
 
     try{
         const answer=await Answer.find({}).sort({'createdAt':-1}).limit(10);
-        console.log(answer);
+       
         if(answer){
             res.status(200).json(
                 {

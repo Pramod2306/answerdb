@@ -5,7 +5,8 @@ const answerController=require("../controller/answer")
 const deviceInfo=require("../util/Deviceinfo");
 
 /* GET home page. */
-router.get('/',deviceInfo,answerController.GetQuestion);
+router.get('/',answerController.GetQuestion);
 router.post("/",answerController.CreateQuestion)
+router.put("/",answerController.addAnswer)
 
 module.exports = router;
